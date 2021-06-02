@@ -16,6 +16,7 @@ Instrumental Setup
 
 Description of column names:
 - DOY: Day of year
+- TIMESTAMP: logging time in CET (UTC + 1), no daylight saving!
 - Ta: Air temperature (degC)
 - RH: Relative humidity (%)
 - ws: Wind speed average (m/s)

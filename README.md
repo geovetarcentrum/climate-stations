@@ -17,7 +17,7 @@ January 1998 to present
 
 ## Setup 
 
-- Central European Summer Time (daylight saving included) is used for all year
+- Central European Time (daylight saving is NOT included) is used for all year
 - Sampling frequency is 10 seconds
 - Averages are saved every 5 minutes 
 
@@ -35,7 +35,7 @@ October 1998 to present
 -  Latitude – 57.691201
 
 ## Setup
-- Central European Summer Time (daylight saving included) is used for all year
+- Central European Time (daylight saving is NOT included) is used for all year
 - Sampling frequency is 10 seconds.
 - Averages are saved every 5 minutes.
 
