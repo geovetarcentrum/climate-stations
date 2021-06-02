@@ -174,8 +174,8 @@ start = datetime.today() - timedelta(days=4)
 
 df_roof["dtime"] = pd.to_datetime(df_roof.TIMESTAMP)
 # convert time to CEST
-df_roof["TIMESTAMP"] = (
-    df_roof["TIMESTAMP"].dt.tz_localize("CET").dt.tz_convert("Europe/Stockholm")
+df_roof["dtime"] = (
+    df_roof["dtime"].dt.tz_localize("CET").dt.tz_convert("Europe/Stockholm")
 )
 # extract last four days
 mask = (df_roof["dtime"] > start) & (df_roof["dtime"] <= end)
@@ -295,8 +295,8 @@ copyfile(Path("C:/DATA/Files/" , OUTPUT5), target)
 # create plot and table image and send to RCG server to display on webpage
 df_bridge["dtime"] = pd.to_datetime(df_bridge.TIMESTAMP)
 # convert time to CEST
-df_bridge["TIMESTAMP"] = (
-    df_bridge["TIMESTAMP"].dt.tz_localize("CET").dt.tz_convert("Europe/Stockholm")
+df_bridge["dtime"] = (
+    df_bridge["dtime"].dt.tz_localize("CET").dt.tz_convert("Europe/Stockholm")
 )
 
 mask = (df_bridge["dtime"] > start) & (df_bridge["dtime"] <= end)

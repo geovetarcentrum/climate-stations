@@ -159,7 +159,7 @@ def bridge_plot(df, swedish=False):
     )  # set the position of the second x-axis to bottom
     ax8.spines["bottom"].set_position(("outward", 40))
     newlabel = []
-    times = df.TIMESTAMP.values[:: 6 * 24].astype(
+    times = df.dtime.values[:: 6 * 24].astype(
         str
     )  # labels of the xticklabels: the position in the new x-axis
     for t in times:
@@ -379,7 +379,7 @@ def roof_plot(df, swedish=False):
     )  # set the position of the second x-axis to bottom
     ax8.spines["bottom"].set_position(("outward", 40))
     newlabel = []
-    times = df.TIMESTAMP.values[:: 6 * 24].astype(
+    times = df.dtime.values[:: 6 * 24].astype(
         str
     )  # labels of the xticklabels: the position in the new x-axis
     for t in times:
@@ -416,7 +416,7 @@ def roof_table(df, swedish=False):
 
     # extract latest measurement
     subset = df.iloc[-1, :]
-    time = subset.TIMESTAMP
+    time = subset.dtime
 
     # language for labelling
     if swedish is True:
@@ -521,7 +521,7 @@ def bridge_table(df, swedish=False):
 
     # extract latest measurement
     subset = df.iloc[-1, :]
-    time = subset.TIMESTAMP
+    time = subset.dtime
 
     # language for labelling
     if swedish is True:
