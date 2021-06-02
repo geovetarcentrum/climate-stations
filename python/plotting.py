@@ -80,7 +80,7 @@ def bridge_plot(df, swedish=False):
     # pressure
     fig = plt.subplot(7, 1, 1)
     ax1 = df.P.plot(color="k", linewidth=linewidth, grid=True)
-    ax1.set_ylabel(ylabels[0], fontsize=size, labelabelpadad=labelpad)
+    ax1.set_ylabel(ylabels[0], fontsize=size, labelpad=labelpad)
     ax1.set_xticks(xticks)
     ax1.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax1.get_yticks()
@@ -92,7 +92,7 @@ def bridge_plot(df, swedish=False):
     # temperature
     fig = plt.subplot(7, 1, 2)
     ax2 = df.Ta.plot(color="red", linewidth=linewidth, grid=True)
-    ax2.set_ylabel(ylabels[1], fontsize=size, labelabelpadad=labelpad)
+    ax2.set_ylabel(ylabels[1], fontsize=size, labelpad=labelpad)
     ax2.set_xticks(xticks)
     ax2.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax2.get_yticks()
@@ -104,7 +104,7 @@ def bridge_plot(df, swedish=False):
     # relative humidity
     fig = plt.subplot(7, 1, 3)
     ax3 = df.RH.plot(color="darkblue", linewidth=linewidth, grid=True)
-    ax3.set_ylabel(ylabels[2], fontsize=size, labelabelpadad=labelpad)
+    ax3.set_ylabel(ylabels[2], fontsize=size, labelpad=labelpad)
     ax3.set_xticks(xticks)
     ax3.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax3.get_yticks()
@@ -116,7 +116,7 @@ def bridge_plot(df, swedish=False):
     # wind speed
     fig = plt.subplot(7, 1, 4)
     ax4 = df.ws.plot(color="teal", linewidth=linewidth, grid=True)
-    ax4.set_ylabel(ylabels[3], fontsize=size, labelabelpadad=labelpad)
+    ax4.set_ylabel(ylabels[3], fontsize=size, labelpad=labelpad)
     ax4.set_xticks(xticks)
     ax4.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax4.get_yticks()
@@ -128,7 +128,7 @@ def bridge_plot(df, swedish=False):
     # wind direction
     fig = plt.subplot(7, 1, 5)
     ax5 = df.wd.plot(color="darkgreen", linewidth=linewidth, grid=True)
-    ax5.set_ylabel(ylabels[4], fontsize=size, labelabelpadad=labelpad)
+    ax5.set_ylabel(ylabels[4], fontsize=size, labelpad=labelpad)
     ax5.set_xticks(xticks)
     ax5.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax5.get_yticks()
@@ -140,7 +140,7 @@ def bridge_plot(df, swedish=False):
     # rain
     fig = plt.subplot(7, 1, 6)
     ax6 = df.Rain.plot(color="grey", linewidth=linewidth, grid=True)
-    ax6.set_ylabel(ylabels[5], fontsize=size, labelabelpadad=labelpad)
+    ax6.set_ylabel(ylabels[5], fontsize=size, labelpad=labelpad)
     ax6.set_xticks(xticks)
     ax6.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax6.get_yticks()
@@ -257,7 +257,7 @@ def roof_plot(df, swedish=False):
     # pressure
     fig = plt.subplot(9, 1, 1)
     ax1 = df.P.plot(color="k", linewidth=linewidth, grid=True)
-    ax1.set_ylabel(ylabels[0], fontsize=size, labelabelpadad=labelpad)
+    ax1.set_ylabel(ylabels[0], fontsize=size, labelpad=labelpad)
     ax1.set_xticks(xticks)
     ax1.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax1.get_yticks()
@@ -270,7 +270,7 @@ def roof_plot(df, swedish=False):
     # temperature
     fig = plt.subplot(9, 1, 2)
     ax2 = df.Ta.plot(color="red", linewidth=linewidth, grid=True)
-    ax2.set_ylabel(ylabels[1], fontsize=size, labelabelpadad=labelpad)
+    ax2.set_ylabel(ylabels[1], fontsize=size, labelpad=labelpad)
     ax2.set_xticks(xticks)
     ax2.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax2.get_yticks()
@@ -282,7 +282,7 @@ def roof_plot(df, swedish=False):
     # relative humidity
     fig = plt.subplot(9, 1, 3)
     ax3 = df.RH.plot(color="darkblue", linewidth=linewidth, grid=True)
-    ax3.set_ylabel(ylabels[2], fontsize=size, labelabelpadad=labelpad)
+    ax3.set_ylabel(ylabels[2], fontsize=size, labelpad=labelpad)
     ax3.set_xticks(xticks)
     ax3.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax3.get_yticks()
@@ -294,7 +294,7 @@ def roof_plot(df, swedish=False):
     # wind speed
     fig = plt.subplot(9, 1, 4)
     ax4 = df.ws.plot(color="teal", linewidth=linewidth, grid=True)
-    ax4.set_ylabel(ylabels[3], fontsize=size, labelabelpadad=labelpad)
+    ax4.set_ylabel(ylabels[3], fontsize=size, labelpad=labelpad)
     ax4.set_xticks(xticks)
     ax4.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax4.get_yticks()
@@ -306,7 +306,7 @@ def roof_plot(df, swedish=False):
     # wind direction
     fig = plt.subplot(9, 1, 5)
     ax5 = df.wd.plot(color="darkgreen", linewidth=linewidth, grid=True)
-    ax5.set_ylabel(ylabels[4], fontsize=size, labelabelpadad=labelpad)
+    ax5.set_ylabel(ylabels[4], fontsize=size, labelpad=labelpad)
     ax5.set_xticks(xticks)
     ax5.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax5.get_yticks()
@@ -318,7 +318,7 @@ def roof_plot(df, swedish=False):
     # rain
     fig = plt.subplot(9, 1, 6)
     ax6 = df.Rain.plot(color="grey", linewidth=linewidth, grid=True)
-    ax6.set_ylabel(ylabels[5], fontsize=size, labelabelpadad=labelpad)
+    ax6.set_ylabel(ylabels[5], fontsize=size, labelpad=labelpad)
     ax6.set_xticks(xticks)
     ax6.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax6.get_yticks()
@@ -330,7 +330,7 @@ def roof_plot(df, swedish=False):
     # hail
     fig = plt.subplot(9, 1, 7)
     ax7 = df.Hail.plot(color="lightblue", linewidth=linewidth, grid=True)
-    ax7.set_ylabel(ylabels[6], fontsize=size, labelabelpadad=labelpad)
+    ax7.set_ylabel(ylabels[6], fontsize=size, labelpad=labelpad)
     ax7.set_xticks(xticks)
     ax7.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax7.get_yticks()
@@ -342,7 +342,7 @@ def roof_plot(df, swedish=False):
     # L down
     fig = plt.subplot(9, 1, 8)
     ax8 = df.L_down.plot(color="orange", linewidth=linewidth, grid=True)
-    ax8.set_ylabel(ylabels[7], fontsize=size, labelabelpadad=labelpad)
+    ax8.set_ylabel(ylabels[7], fontsize=size, labelpad=labelpad)
     ax8.set_xticks(xticks)
     ax8.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax8.get_yticks()
@@ -360,7 +360,7 @@ def roof_plot(df, swedish=False):
         color="violet", linewidth=linewidth, label="diffus", grid=True
     )
     ax9.legend(fontsize=size)
-    ax9.set_ylabel(ylabels[8], fontsize=size, labelabelpadad=labelpad)
+    ax9.set_ylabel(ylabels[8], fontsize=size, labelpad=labelpad)
     ax9.set_xticks(xticks)
     ax9.set_xticklabels(xticklabels, fontsize=size)
     yticks = ax9.get_yticks()
