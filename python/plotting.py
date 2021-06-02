@@ -528,6 +528,8 @@ def bridge_table(df, swedish=False):
         name = "Bridgetable_plot_sv"
         ylabels = [
             "CEST",
+            "hPa",
+            "degC",
             "%",
             "m/s",
             "grad",
