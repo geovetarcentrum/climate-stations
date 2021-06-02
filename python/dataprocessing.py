@@ -171,7 +171,15 @@ copyfile(Path("C:/DATA/Files/", OUTPUT5), target)
 # create plot of last 4 days and table image of last measurement
 # and send to RCG server for display on webpage
 end = datetime.today()
-start = datetime.today() - timedelta(days=4)
+# take one more hour to plot if it is summer time
+if pd.Timestamp(d).tz_localize(tz=pytz.FixedOffset(60)).hours == pd.Timestamp(
+    d
+).tz_localize("CET"):
+    today = datetime.today() + timedelta(hours=1)
+else:
+    today = datetime.today()
+
+start = today - timedelta(days=4)
 
 df_roof["dtime"] = pd.to_datetime(df_roof.TIMESTAMP)
 df_roof["TIMESTAMP"] = pd.to_datetime(df_roof.TIMESTAMP)
