@@ -172,9 +172,9 @@ copyfile(Path("C:/DATA/Files/", OUTPUT5), target)
 # and send to RCG server for display on webpage
 end = datetime.today()
 # take one more hour to plot if it is summer time
-if pd.Timestamp(d).tz_localize(tz=pytz.FixedOffset(60)).hours == pd.Timestamp(
-    d
-).tz_localize("CET"):
+if pd.Timestamp(datetime.today()).tz_localize(
+    tz=pytz.FixedOffset(60)
+).hours == pd.Timestamp(datetime.today()).tz_localize("CET"):
     today = datetime.today() + timedelta(hours=1)
 else:
     today = datetime.today()
