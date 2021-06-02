@@ -13,6 +13,7 @@ Contact: juliakukulies@gu.se
 from pathlib import Path
 from shutil import copyfile
 from datetime import date, datetime, timedelta
+import pytz
 import pandas as pd
 
 # import plotting module and functions for preprocessing
@@ -176,7 +177,9 @@ df_roof["dtime"] = pd.to_datetime(df_roof.TIMESTAMP)
 df_roof["TIMESTAMP"] = pd.to_datetime(df_roof.TIMESTAMP)
 # convert time to CEST
 df_roof["TIMESTAMP"] = (
-    df_roof["TIMESTAMP"].dt.tz_localize("CET").dt.tz_convert("Europe/Stockholm")
+    df_roof["TIMESTAMP"]
+    .dt.tz_localize(tz=pytz.FixedOffset(60))
+    .dt.tz_convert("Europe/Stockholm")
 )
 # extract last four days
 mask = (df_roof["dtime"] > start) & (df_roof["dtime"] <= end)
@@ -298,7 +301,9 @@ df_bridge["dtime"] = pd.to_datetime(df_bridge.TIMESTAMP)
 df_bridge["TIMESTAMP"] = pd.to_datetime(df_bridge.TIMESTAMP)
 # convert time to CEST
 df_bridge["TIMESTAMP"] = (
-    df_bridge["TIMESTAMP"].dt.tz_localize("CET").dt.tz_convert("Europe/Stockholm")
+    df_bridge["TIMESTAMP"]
+    .dt.tz_localize(tz=pytz.FixedOffset(60))
+    .dt.tz_convert("Europe/Stockholm")
 )
 
 mask = (df_bridge["dtime"] > start) & (df_bridge["dtime"] <= end)
