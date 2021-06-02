@@ -117,7 +117,7 @@ df_roof.to_csv(
 
 # send to .csv file to RCG server via shared drive
 target = web_files / "GVCdata" / OUTPUT10
-copyfile(Path("C:/DATA/Files/",  OUTPUT10), target)
+copyfile(Path("C:/DATA/Files/", OUTPUT10), target)
 
 
 ########### process  .dat files for 5 minutes ##############
@@ -161,7 +161,7 @@ df_roof.to_csv(
 
 # send to .csv file to RCG server via shared drive
 target = web_files / "GVCdata" / OUTPUT5
-copyfile(Path("C:/DATA/Files/" , OUTPUT5), target)
+copyfile(Path("C:/DATA/Files/", OUTPUT5), target)
 
 
 #############################plotting #########################################
@@ -238,7 +238,7 @@ df_bridge = quality_control(df_bridge)
 OUTPUT10 = "gvc_bridge_10mindata_" + str(year) + "_" + MONTH + ".csv"
 # save locally
 df_bridge.to_csv(
-    Path("C:/DATA/Files/" , OUTPUT10),
+    Path("C:/DATA/Files/", OUTPUT10),
     index=False,
     sep=",",
     encoding="utf-8",
@@ -248,7 +248,7 @@ df_bridge.to_csv(
 
 # send to RCG server via share drive
 target = web_files / "Bridgedata" / OUTPUT10
-copyfile(Path("C:/DATA/Files/" , OUTPUT10), target)
+copyfile(Path("C:/DATA/Files/", OUTPUT10), target)
 
 
 ####################### process .dat files for 5 minutes#######################
@@ -278,7 +278,7 @@ df_bridge = quality_control(df_bridge)
 OUTPUT5 = "gvc_bridge_5mindata_" + str(year) + "_" + MONTH + ".csv"
 # save locally
 df_bridge.to_csv(
-    Path("C:/DATA/Files/" , OUTPUT5),
+    Path("C:/DATA/Files/", OUTPUT5),
     index=False,
     sep=",",
     encoding="utf-8",
@@ -288,7 +288,7 @@ df_bridge.to_csv(
 
 # send to RCG server via share drive
 target = web_files / "Bridgedata" / OUTPUT5
-copyfile(Path("C:/DATA/Files/" , OUTPUT5), target)
+copyfile(Path("C:/DATA/Files/", OUTPUT5), target)
 
 
 ########################## plotting ###########################################

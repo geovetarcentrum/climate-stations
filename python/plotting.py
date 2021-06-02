@@ -527,9 +527,7 @@ def bridge_table(df, swedish=False):
     if swedish is True:
         name = "Bridgetable_plot_sv"
         ylabels = [
-            "LCT",
-            "hPa",
-            "gradC",
+            "CEST",
             "%",
             "m/s",
             "grad",
@@ -559,7 +557,7 @@ def bridge_table(df, swedish=False):
         ]
         name = "Bridgetable_plot"
         ylabels = [
-            "LCT",
+            "CEST",
             "hPa",
             "degC",
             "%",
