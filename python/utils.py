@@ -75,6 +75,7 @@ def make_csv(table, pset, year, month):
     df_.to_csv(
         source,
         index=False,
+        float_format='%.5g',
         sep=",",
         encoding="utf-8",
         na_rep="",
