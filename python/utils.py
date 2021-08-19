@@ -8,15 +8,142 @@ The main utilities are to calculate downwelling longwave radiation from
 measured body temperature, to extract and redefine column names and
 to performq quality control of the measured values.
 
-@author: Julia Kukulies
+@author: Julia Kukulies, see GitHub for history
 """
 
-
-from datetime import date, timedelta
 import numpy as np
 import pandas as pd
 
+from pathlib import Path
+from shutil import copyfile
+from datetime import date, datetime, timedelta
+import pytz
+
+
+# import plotting module and functions for preprocessing
+from plotting import bridge_plot, roof_plot, roof_table, bridge_table
+
+
 ############################### Define functions ##############################
+
+def load_logger_data(f):
+    """ Top-level function to load a table from a logger output file.
+    
+    f - filename
+    """
+    table = pd.read_table(f, sep=",", header=1, low_memory=False)
+    # skip first two rows
+    table = table.iloc[2::, :]
+    # replace nan values with empty field
+    table = table.replace("NAN", "", regex=True)
+    # add a datetime.
+    table["dtime"] = pd.to_datetime(table.TIMESTAMP)
+    return(table)
+
+def make_csv(table, pset, year, month):
+    """ Write out a CSV file
+    
+    Inputs:
+    table - as output from load_logger_data
+    station - "roof" or "bridge"
+    interval - "10" or "5"
+    year & month as int
+    
+    Output:
+    filename Local that was written to.
+    """
+    
+    output_dir = pset["csv_output_dir"]
+    do_QC=pset["do_QC"]
+    station=pset["station"]
+    interval=pset["interval"]
+    
+    MONTH = "0" + str(month)
+    if month > 9:
+      MONTH = str(month)
+    YEAR = str(year)
+
+    data = table[(table.dtime.dt.year == year) & (table.dtime.dt.month == month)]
+
+    # Call processing functions
+    df_ = get_data(data, pset)
+    
+    # Saving monthly .csv file
+    OUTPUT10 = "gvc_" + station + "_" + interval +  "mindata_" + YEAR + "_" + MONTH + ".csv"
+    # save locally
+    source=Path(output_dir, OUTPUT10)
+    df_.to_csv(
+        source,
+        index=False,
+        sep=",",
+        encoding="utf-8",
+        na_rep="",
+        header=df_.columns,
+    )
+
+    return(source)
+
+def make_plot(table, pset):
+    """ Create a plot for the last 4 days, copy to web directory
+    """
+    # create plot of last 4 days and table image of last measurement
+    # and send to RCG server for display on webpage
+    end = datetime.today()
+    # take one more hour to plot if it is summer time
+    if (
+        pd.Timestamp(datetime.today()).tz_localize(tz=pytz.FixedOffset(60)).hour
+        == pd.Timestamp(datetime.today()).tz_localize("CET").hour
+    ):
+        today = datetime.today() + timedelta(hours=1)
+    else:
+        today = datetime.today()
+
+    start = today - timedelta(days=4)
+
+    #data = table[(table.dtime.dt.year == year) & (table.dtime.dt.month == month)]
+    data = table[(table.dtime > start) & (table.dtime <= end) ]
+    
+    # Call processing functions
+    df_ = get_data(data, pset)
+
+    df_["dtime"] = pd.to_datetime(df_.TIMESTAMP)
+    df_["TIMESTAMP"] = pd.to_datetime(df_.TIMESTAMP)
+    # convert time to CEST
+    df_["TIMESTAMP"] = (
+        df_["TIMESTAMP"]
+        .dt.tz_localize(tz=pytz.FixedOffset(60))
+        .dt.tz_convert("Europe/Stockholm")
+    )
+    # extract last four days
+    #mask = (df_roof["dtime"] > start) & (df_roof["dtime"] <= end)
+    #roof = df_roof.loc[mask]
+
+    if pset["station"]=="roof":
+      LOCAL_NAME = roof_plot(df_, pset["plot_output_dir"])
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVC_plot.png")
+  
+      LOCAL_NAME = roof_plot(df_, pset["plot_output_dir"], swedish=True)
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVC_plot_sv.png")
+  
+      LOCAL_NAME = roof_table(df_, pset["plot_output_dir"])
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVCtable_plot.png")
+  
+      LOCAL_NAME = roof_table(df_, pset["plot_output_dir"] , swedish=True)
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVCtable_plot_sv.png")
+      
+    if pset["station"]=="bridge":
+      LOCAL_NAME = bridge_plot(df_, pset["plot_output_dir"])
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridge_plot.png")
+  
+      LOCAL_NAME = bridge_plot(df_, pset["plot_output_dir"], swedish=True)
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridge_plot_sv.png")
+  
+      LOCAL_NAME = bridge_table(df_, pset["plot_output_dir"])
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridgetable_plot.png")
+  
+      LOCAL_NAME = bridge_table(df_, pset["plot_output_dir"] , swedish=True)
+      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridgetable_plot_sv.png")
+     
 
 
 def get_radiation(data):
@@ -28,7 +155,7 @@ def get_radiation(data):
     return L_down
 
 
-def get_data(data, oldcolumns, newcolumns):
+def get_data(data, pset):
     """This function extracts usable columns from logger data
     and creates a new dataframe df.
 
@@ -40,7 +167,55 @@ def get_data(data, oldcolumns, newcolumns):
     Returns:
     df- pandas dataframe with extracted data
     """
-
+    station = pset["station"]
+    
+    if station=="roof":
+      oldcolumns  = [
+          "Wd_avg_Avg",
+          "Ws_min_Avg",
+          "Ws_avg_Avg",
+          "Ws_max_Avg",
+          "Ta_Avg",
+          "RH_Avg",
+          "P_Avg",
+          "Ri_intens_Avg",
+          "Hd_intens_Avg",
+          "SPN1_Total_Avg",
+          "SPN1_diff_Avg",
+          "temp_L_K_Avg",
+          "L_sig_Avg",
+      ]
+      
+      newcolumns  = [
+        "wd",
+        "ws_min",
+        "ws",
+        "ws_max",
+        "Ta",
+        "RH",
+        "P",
+        "Rain",
+        "Hail",
+        "K_down_SPN1",
+        "K_diff_SPN1",
+        "L_down",
+        "K_down_Knz",
+      ]
+    else:
+      oldcolumns  = [
+          "Wd_avg_Avg",
+          "Ws_min_Avg",
+          "Ws_avg_Avg",
+          "Ws_max_Avg",
+          "Ta_Avg",
+          "RH_Avg",
+          "P_Avg",
+          "Ri_intens_Avg",
+          "Hd_intens_Avg",
+      ]
+      
+      newcolumns  = ["wd", "ws_min", "ws", "ws_max", "Ta", "RH", "P", "Rain", "Hail"]
+      
     # Get columns for Code, Year, DOY, HHMM
     df = pd.DataFrame()
     df["Code"] = data.RECORD.values.astype(str)
@@ -69,6 +244,18 @@ def get_data(data, oldcolumns, newcolumns):
         newname = newcolumns[i]
         newcol = pd.to_numeric(data[col].values)
         df[newname] = newcol
+        
+    if pset["do_QC"]:
+      df = quality_control(df)
+    
+    if station=="roof":
+      # calculate downwelling longwave-radiation with Stefan Boltzmann law
+      L_down = get_radiation(data)
+      # replace body temperature with L_down
+      df["L_down"] = L_down
+      # remove signal and replace with empty column for old radiation data
+      df["K_down_KnZ"] = ""
+      
     return df
 
 

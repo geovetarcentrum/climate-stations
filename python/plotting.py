@@ -12,8 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from pandas.plotting import table
 
-def bridge_plot(df, swedish=False):
+def bridge_plot(df, output_dir, swedish=False):
     """This function plots GVC roof date the four last days at 5 min resolution.
 
     Parameter:
@@ -178,13 +179,14 @@ def bridge_plot(df, swedish=False):
         name = "Bridge_plot_sv"
 
     # save locally
-    LOCAL_NAME = "C:/DATA/Figures/" + name + str(datetime.date.today()) + ".png"
+    f = name + str(datetime.date.today()) + ".png"
+    LOCAL_NAME = output_dir / f
     plt.savefig(LOCAL_NAME, facecolor=fig.get_facecolor(), transparent=True)
 
     return LOCAL_NAME
 
 
-def roof_plot(df, swedish=False):
+def roof_plot(df, output_dir, swedish=False):
     """This function plots GVC roof date of the four last days at 10 min resolution.
 
     Parameter:
@@ -398,13 +400,14 @@ def roof_plot(df, swedish=False):
         name = "GVC_plot_sv"
 
     # save locally
-    LOCAL_NAME = "C:/DATA/Figures/" + name + str(datetime.date.today()) + ".png"
+    f = name + str(datetime.date.today()) + ".png"
+    LOCAL_NAME = output_dir / f
     plt.savefig(LOCAL_NAME, facecolor=fig.get_facecolor(), transparent=True)
 
     return LOCAL_NAME
 
 
-def roof_table(df, swedish=False):
+def roof_table(df, output_dir, swedish=False):
     """This function creates an image showing a table with the latest measurement for meteorological data from the bridge.
 
     Parameter:
@@ -491,15 +494,15 @@ def roof_table(df, swedish=False):
         subset.K_down_SPN1,
         subset.K_diff_SPN1,
     ]
-    table = pd.DataFrame(columns=["variable", "value", "units"])
-    table["value"] = values
-    table["variable"] = labels
-    table["units"] = ylabels
+    df2 = pd.DataFrame(columns=["variable", "value", "units"])
+    df2["value"] = values
+    df2["variable"] = labels
+    df2["units"] = ylabels
 
     # save pandas dataframe as image (locally)
-    LOCAL_NAME = "C:/DATA/Figures/" + name + str(datetime.date.today()) + ".png"
-    df = table
-    from pandas.plotting import table
+    f = name + str(datetime.date.today()) + ".png"
+    LOCAL_NAME = output_dir / f
+    df = df2
 
     fig, ax = plt.subplots(figsize=(12, 5))
     ax.axis("off")
@@ -509,12 +512,13 @@ def roof_table(df, swedish=False):
     return LOCAL_NAME
 
 
-def bridge_table(df, swedish=False):
+def bridge_table(df, output_dir, swedish=False):
     """This function creates an image showing a table with the latest measurement for meteorological data from the bridge.
 
     Parameter:
 
     df: dataframe containing data of the latest four days
+    output_dir - Path to output file to, no name component.
     swedish: optional choice for language of labels, True for swedish, standard is English
 
     """
@@ -580,15 +584,15 @@ def bridge_table(df, swedish=False):
         subset.Rain,
         subset.Hail,
     ]
-    table = pd.DataFrame(columns=["variable", "value", "units"])
-    table["variable"] = labels
-    table["units"] = ylabels
-    table["value"] = values
+    df2 = pd.DataFrame(columns=["variable", "value", "units"])
+    df2["variable"] = labels
+    df2["units"] = ylabels
+    df2["value"] = values
 
     # save pandas dataframe as image (locally)
-    LOCAL_NAME = "C:/DATA/Figures/" + name + str(datetime.date.today()) + ".png"
-    df = table
-    from pandas.plotting import table
+    f = name + str(datetime.date.today()) + ".png"
+    LOCAL_NAME = output_dir / f
+    df = df2
 
     fig, ax = plt.subplots(figsize=(12, 5))
     ax.axis("off")
