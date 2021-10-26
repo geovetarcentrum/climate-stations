@@ -7,7 +7,9 @@ monthly .csv files that can be downloaded from web.
 > python dataprocessing.py 2021 8
 
 If called with command-line arguments year and month, it updates the csv
-files for that time (without makeing plots of backup copies).
+files for that time (without makeing plots of backup copies). 
+If you want to update the plot, then presumably you want the current
+month, so you don't need to give any cmd-line args
 
 Contact: juliakukulies@gu.se David.Rayner@gu.se
 """
