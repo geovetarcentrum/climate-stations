@@ -22,9 +22,9 @@
 |  Meteo. variable |   Instrument                    | Time period             |  Sampling frequency |
 |:----------------:|:-------------------------------:|:-----------------------:|:-------------------:|
 |                  |                                 |   |                     |
-| Air temperature  | Vaisala, WXT210                 | March 2013 - present    | 10 min              |
-| Air pressure     | Vaisala, WXT210                 | March 2013 - present    | 10 min              |
-| Humidity         | Vaisala, WXT210                 | March 2013 - present    | 10 min              |
-| Wind speed       | Vaisala, WXT210                 | March 2013 - present    | 10 min              |
-| Wind direction   | Vaisala, WXT210                 | March 2013 - present    | 10 min              |
-| Precipitation    | Vaisala, WXt2010                | March 2013 - present    | 10 min              |
+| Air temperature  | Vaisala, WXT510                 | March 2013 - present    | 10 min              |
+| Air pressure     | Vaisala, WXT510                 | March 2013 - present    | 10 min              |
+| Humidity         | Vaisala, WXT510                 | March 2013 - present    | 10 min              |
+| Wind speed       | Vaisala, WXT510                 | March 2013 - present    | 10 min              |
+| Wind direction   | Vaisala, WXT510                 | March 2013 - present    | 10 min              |
+| Precipitation    | Vaisala, WXT510                | March 2013 - present    | 10 min              |
