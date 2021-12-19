@@ -14,6 +14,7 @@ import pandas as pd
 
 from pandas.plotting import table
 
+
 def bridge_plot(df, output_dir, swedish=False):
     """This function plots GVC roof date the four last days at 5 min resolution.
 
@@ -361,7 +362,9 @@ def roof_plot(df, output_dir, swedish=False):
     ax9 = df.K_diff_SPN1.plot(
         color="violet", linewidth=linewidth, label="diffus", grid=True
     )
-    ax9.legend(fontsize=size)
+    legend = ax9.legend(fontsize=size, edgecolor="black")
+    legend.get_frame().set_alpha(None)
+    legend.get_frame().set_facecolor((0, 0, 1, 0.1))
     ax9.set_ylabel(ylabels[8], fontsize=size, labelpad=labelpad)
     ax9.set_xticks(xticks)
     ax9.set_xticklabels(xticklabels, fontsize=size)
@@ -402,7 +405,7 @@ def roof_plot(df, output_dir, swedish=False):
     # save locally
     f = name + str(datetime.date.today()) + ".png"
     LOCAL_NAME = output_dir / f
-    plt.savefig(LOCAL_NAME, facecolor=fig.get_facecolor(), transparent=True)
+    plt.savefig(LOCAL_NAME, transparent=True, boox_inches="tight")
 
     return LOCAL_NAME
 
@@ -504,11 +507,17 @@ def roof_table(df, output_dir, swedish=False):
     LOCAL_NAME = output_dir / f
     df = df2
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(18, 8))
     ax.axis("off")
-    table(ax, df, loc="center")
-    plt.savefig(LOCAL_NAME)
-
+    # plt.rcParams.update({'font.size': 24})
+    ta = table(ax, df, loc="center", zorder=3.0)
+    # Setting the font size
+    ta.set_fontsize(38)
+    # Rescaling the rows to be more readable
+    ta.scale(1, 3)
+    plt.rcParams.update({"font.size": 38})
+    plt.savefig(LOCAL_NAME, transparent=True, bbox_inches="tight")
+    plt.tight_layout()
     return LOCAL_NAME
 
 

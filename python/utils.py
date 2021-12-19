@@ -26,9 +26,10 @@ from plotting import bridge_plot, roof_plot, roof_table, bridge_table
 
 ############################### Define functions ##############################
 
+
 def load_logger_data(f):
-    """ Top-level function to load a table from a logger output file.
-    
+    """Top-level function to load a table from a logger output file.
+
     f - filename
     """
     table = pd.read_table(f, sep=",", header=1, low_memory=False)
@@ -38,55 +39,58 @@ def load_logger_data(f):
     table = table.replace("NAN", "", regex=True)
     # add a datetime.
     table["dtime"] = pd.to_datetime(table.TIMESTAMP)
-    return(table)
+    return table
+
 
 def make_csv(table, pset, year, month):
-    """ Write out a CSV file
-    
+    """Write out a CSV file
+
     Inputs:
     table - as output from load_logger_data
     station - "roof" or "bridge"
     interval - "10" or "5"
     year & month as int
-    
+
     Output:
     filename Local that was written to.
     """
-    
+
     output_dir = pset["csv_output_dir"]
-    do_QC=pset["do_QC"]
-    station=pset["station"]
-    interval=pset["interval"]
-    
+    do_QC = pset["do_QC"]
+    station = pset["station"]
+    interval = pset["interval"]
+
     MONTH = "0" + str(month)
     if month > 9:
-      MONTH = str(month)
+        MONTH = str(month)
     YEAR = str(year)
 
     data = table[(table.dtime.dt.year == year) & (table.dtime.dt.month == month)]
 
     # Call processing functions
     df_ = get_data(data, pset)
-    
+
     # Saving monthly .csv file
-    OUTPUT10 = "gvc_" + station + "_" + interval +  "mindata_" + YEAR + "_" + MONTH + ".csv"
+    OUTPUT10 = (
+        "gvc_" + station + "_" + interval + "mindata_" + YEAR + "_" + MONTH + ".csv"
+    )
     # save locally
-    source=Path(output_dir, OUTPUT10)
+    source = Path(output_dir, OUTPUT10)
     df_.to_csv(
         source,
         index=False,
-        float_format='%.5g',
+        float_format="%.5g",
         sep=",",
         encoding="utf-8",
         na_rep="",
         header=df_.columns,
     )
 
-    return(source)
+    return source
+
 
 def make_plot(table, pset):
-    """ Create a plot for the last 4 days, copy to web directory
-    """
+    """Create a plot for the last 4 days, copy to web directory"""
     # create plot of last 4 days and table image of last measurement
     # and send to RCG server for display on webpage
     end = datetime.today()
@@ -101,9 +105,9 @@ def make_plot(table, pset):
 
     start = today - timedelta(days=4)
 
-    #data = table[(table.dtime.dt.year == year) & (table.dtime.dt.month == month)]
-    data = table[(table.dtime > start) & (table.dtime <= end) ]
-    
+    # data = table[(table.dtime.dt.year == year) & (table.dtime.dt.month == month)]
+    data = table[(table.dtime > start) & (table.dtime <= end)]
+
     # Call processing functions
     df_ = get_data(data, pset)
 
@@ -116,35 +120,34 @@ def make_plot(table, pset):
         .dt.tz_convert("Europe/Stockholm")
     )
     # extract last four days
-    #mask = (df_roof["dtime"] > start) & (df_roof["dtime"] <= end)
-    #roof = df_roof.loc[mask]
+    # mask = (df_roof["dtime"] > start) & (df_roof["dtime"] <= end)
+    # roof = df_roof.loc[mask]
 
-    if pset["station"]=="roof":
-      LOCAL_NAME = roof_plot(df_, pset["plot_output_dir"])
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVC_plot.png")
-  
-      LOCAL_NAME = roof_plot(df_, pset["plot_output_dir"], swedish=True)
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVC_plot_sv.png")
-  
-      LOCAL_NAME = roof_table(df_, pset["plot_output_dir"])
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVCtable_plot.png")
-  
-      LOCAL_NAME = roof_table(df_, pset["plot_output_dir"] , swedish=True)
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVCtable_plot_sv.png")
-      
-    if pset["station"]=="bridge":
-      LOCAL_NAME = bridge_plot(df_, pset["plot_output_dir"])
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridge_plot.png")
-  
-      LOCAL_NAME = bridge_plot(df_, pset["plot_output_dir"], swedish=True)
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridge_plot_sv.png")
-  
-      LOCAL_NAME = bridge_table(df_, pset["plot_output_dir"])
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridgetable_plot.png")
-  
-      LOCAL_NAME = bridge_table(df_, pset["plot_output_dir"] , swedish=True)
-      copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridgetable_plot_sv.png")
-     
+    if pset["station"] == "roof":
+        LOCAL_NAME = roof_plot(df_, pset["plot_output_dir"])
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVC_plot.png")
+
+        LOCAL_NAME = roof_plot(df_, pset["plot_output_dir"], swedish=True)
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVC_plot_sv.png")
+
+        LOCAL_NAME = roof_table(df_, pset["plot_output_dir"])
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVCtable_plot.png")
+
+        LOCAL_NAME = roof_table(df_, pset["plot_output_dir"], swedish=True)
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "GVCtable_plot_sv.png")
+
+    if pset["station"] == "bridge":
+        LOCAL_NAME = bridge_plot(df_, pset["plot_output_dir"])
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridge_plot.png")
+
+        LOCAL_NAME = bridge_plot(df_, pset["plot_output_dir"], swedish=True)
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridge_plot_sv.png")
+
+        LOCAL_NAME = bridge_table(df_, pset["plot_output_dir"])
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridgetable_plot.png")
+
+        LOCAL_NAME = bridge_table(df_, pset["plot_output_dir"], swedish=True)
+        copyfile(LOCAL_NAME, pset["plot_web_dir"] / "Bridgetable_plot_sv.png")
 
 
 def get_radiation(data):
@@ -169,54 +172,54 @@ def get_data(data, pset):
     df- pandas dataframe with extracted data
     """
     station = pset["station"]
-    
-    if station=="roof":
-      oldcolumns  = [
-          "Wd_avg_Avg",
-          "Ws_min_Avg",
-          "Ws_avg_Avg",
-          "Ws_max_Avg",
-          "Ta_Avg",
-          "RH_Avg",
-          "P_Avg",
-          "Ri_intens_Avg",
-          "Hd_intens_Avg",
-          "SPN1_Total_Avg",
-          "SPN1_diff_Avg",
-          "temp_L_K_Avg",
-          "L_sig_Avg",
-      ]
-      
-      newcolumns  = [
-        "wd",
-        "ws_min",
-        "ws",
-        "ws_max",
-        "Ta",
-        "RH",
-        "P",
-        "Rain",
-        "Hail",
-        "K_down_SPN1",
-        "K_diff_SPN1",
-        "L_down",
-        "K_down_Knz",
-      ]
+
+    if station == "roof":
+        oldcolumns = [
+            "Wd_avg_Avg",
+            "Ws_min_Avg",
+            "Ws_avg_Avg",
+            "Ws_max_Avg",
+            "Ta_Avg",
+            "RH_Avg",
+            "P_Avg",
+            "Ri_intens_Avg",
+            "Hd_intens_Avg",
+            "SPN1_Total_Avg",
+            "SPN1_diff_Avg",
+            "temp_L_K_Avg",
+            "L_sig_Avg",
+        ]
+
+        newcolumns = [
+            "wd",
+            "ws_min",
+            "ws",
+            "ws_max",
+            "Ta",
+            "RH",
+            "P",
+            "Rain",
+            "Hail",
+            "K_down_SPN1",
+            "K_diff_SPN1",
+            "L_down",
+            "K_down_Knz",
+        ]
     else:
-      oldcolumns  = [
-          "Wd_avg_Avg",
-          "Ws_min_Avg",
-          "Ws_avg_Avg",
-          "Ws_max_Avg",
-          "Ta_Avg",
-          "RH_Avg",
-          "P_Avg",
-          "Ri_intens_Avg",
-          "Hd_intens_Avg",
-      ]
-      
-      newcolumns  = ["wd", "ws_min", "ws", "ws_max", "Ta", "RH", "P", "Rain", "Hail"]
-      
+        oldcolumns = [
+            "Wd_avg_Avg",
+            "Ws_min_Avg",
+            "Ws_avg_Avg",
+            "Ws_max_Avg",
+            "Ta_Avg",
+            "RH_Avg",
+            "P_Avg",
+            "Ri_intens_Avg",
+            "Hd_intens_Avg",
+        ]
+
+        newcolumns = ["wd", "ws_min", "ws", "ws_max", "Ta", "RH", "P", "Rain", "Hail"]
+
     # Get columns for Code, Year, DOY, HHMM
     df = pd.DataFrame()
     df["Code"] = data.RECORD.values.astype(str)
@@ -245,18 +248,18 @@ def get_data(data, pset):
         newname = newcolumns[i]
         newcol = pd.to_numeric(data[col].values)
         df[newname] = newcol
-        
+
     if pset["do_QC"]:
-      df = quality_control(df)
-    
-    if station=="roof":
-      # calculate downwelling longwave-radiation with Stefan Boltzmann law
-      L_down = get_radiation(data)
-      # replace body temperature with L_down
-      df["L_down"] = L_down
-      # remove signal and replace with empty column for old radiation data
-      df["K_down_KnZ"] = ""
-      
+        df = quality_control(df)
+
+    if station == "roof":
+        # calculate downwelling longwave-radiation with Stefan Boltzmann law
+        L_down = get_radiation(data)
+        # replace body temperature with L_down
+        df["L_down"] = L_down
+        # remove signal and replace with empty column for old radiation data
+        df["K_down_KnZ"] = ""
+
     return df
 
 

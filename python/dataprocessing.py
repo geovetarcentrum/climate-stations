@@ -22,31 +22,29 @@ import config
 
 ################################################################################ Default
 
-if len(sys.argv)==1:
-  default_mode = True
-  month = int(date.today().month)
-  year = int(date.today().year)
+if len(sys.argv) == 1:
+    default_mode = True
+    month = int(date.today().month)
+    year = int(date.today().year)
 else:
-  default_mode = False
-  year = int(sys.argv[1])
-  month = int(sys.argv[2])
+    default_mode = False
+    year = int(sys.argv[1])
+    month = int(sys.argv[2])
 
 for pset in config.sets_to_process:
-  
-  f = pset["logger_file"]
-  if default_mode:
-    # backup copy
-    copyfile(f, pset["backup_dir"]/f.name)
 
-  table=load_logger_data(f)
-  source = make_csv(table, pset, year, month)
-  
-  if pset["csv_web_dir"]:    
-    # send to .csv file to RCG server via shared drive
-    target = pset["csv_web_dir"] / source.name
-    copyfile(source, target)
-    
-  if default_mode and pset["plot_output_dir"]:
-    make_plot(table, pset)
- 
+    f = pset["logger_file"]
+    if default_mode:
+        # backup copy
+        copyfile(f, pset["backup_dir"] / f.name)
 
+    table = load_logger_data(f)
+    source = make_csv(table, pset, year, month)
+
+    if pset["csv_web_dir"]:
+        # send to .csv file to RCG server via shared drive
+        target = pset["csv_web_dir"] / source.name
+        copyfile(source, target)
+
+    if default_mode and pset["plot_output_dir"]:
+        make_plot(table, pset)
