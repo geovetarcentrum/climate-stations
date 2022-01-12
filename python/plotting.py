@@ -405,7 +405,7 @@ def roof_plot(df, output_dir, swedish=False):
     # save locally
     f = name + str(datetime.date.today()) + ".png"
     LOCAL_NAME = output_dir / f
-    plt.savefig(LOCAL_NAME, transparent=True, boox_inches="tight")
+    plt.savefig(LOCAL_NAME, transparent=True, bbox_inches="tight")
 
     return LOCAL_NAME
 
