@@ -18,7 +18,7 @@ from pathlib import Path
 from shutil import copyfile
 from datetime import date, datetime, timedelta
 import pytz
-
+import warnings
 
 # import plotting module and functions for preprocessing
 from plotting import bridge_plot, roof_plot, roof_table, bridge_table
@@ -250,7 +250,10 @@ def get_data(data, pset):
         df[newname] = newcol
 
     if pset["do_QC"]:
-        df = quality_control(df)
+        with warnings.catch_warnings():
+            # suppress warnings for this specific function
+            warnings.simplefilter("ignore")
+            df = quality_control(df)
 
     if station == "roof":
         # calculate downwelling longwave-radiation with Stefan Boltzmann law
