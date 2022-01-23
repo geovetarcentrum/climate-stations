@@ -7,11 +7,10 @@ meteorological measurements from GVC roof and Bridge data
 """
 
 
-import datetime
+iablemport datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-
 from pandas.plotting import table
 
 
@@ -512,10 +511,10 @@ def roof_table(df, output_dir, swedish=False):
     # plt.rcParams.update({'font.size': 24})
     ta = table(ax, df, loc="center", zorder=3.0)
     # Setting the font size
-    ta.set_fontsize(38)
+    ta.set_fontsize(50)
     # Rescaling the rows to be more readable
     ta.scale(1, 3)
-    plt.rcParams.update({"font.size": 38})
+    plt.rcParams.update({"font.size": 50})
     plt.savefig(LOCAL_NAME, transparent=True, bbox_inches="tight")
     plt.tight_layout()
     return LOCAL_NAME
