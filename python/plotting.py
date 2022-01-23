@@ -7,7 +7,7 @@ meteorological measurements from GVC roof and Bridge data
 """
 
 
-iablemport datetime
+import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -435,9 +435,9 @@ def roof_table(df, output_dir, swedish=False):
             "Vindriktning",
             "Regn",
             "Hagel",
-            "Inkommande långvågig strålning",
-            "Inkommande kortvågig strålning global",
-            "Inkommande kortvågig strålning diffus",
+            "Inkommande LV strålning",
+            "Inkommande KV strålning global",
+            "Inkommande KV strålning diffus",
         ]
         ylabels = [
             "CEST",
@@ -464,9 +464,9 @@ def roof_table(df, output_dir, swedish=False):
             "Wind direction",
             "Rain",
             "Hail",
-            "Incoming longwave radiation",
-            "Incoming shortwave radiation global",
-            "Incoming shortwave radiation diffuse",
+            "Incoming LW radiation",
+            "Incoming SW radiation global",
+            "Incoming SW radiation diffuse",
         ]
         ylabels = [
             "CEST",
@@ -506,17 +506,27 @@ def roof_table(df, output_dir, swedish=False):
     LOCAL_NAME = output_dir / f
     df = df2
 
-    fig, ax = plt.subplots(figsize=(18, 8))
+    # alternative table formatting: 
+    #df_changed = df.style.set_properties(**{            'background-color': None , 'font-size': '120pt',})
+    #import dataframe_image as dfi
+    #dfi.export(df_changed,"table.png" )
+
+    # HTML file of table 
+    #html = df.to_html()
+    #text_file = open("table.html", "w")
+    #text_file.write(html)
+    #text_file.close()
+
+    fig, ax = plt.subplots(figsize=(32, 12))
     ax.axis("off")
-    # plt.rcParams.update({'font.size': 24})
-    ta = table(ax, df, loc="center", zorder=3.0)
-    # Setting the font size
-    ta.set_fontsize(50)
+    ta = table(ax, df, loc="center", zorder=5.0)
+     # Setting the font size
+    ta.auto_set_font_size(False)
+    ta.set_fontsize(44) 
     # Rescaling the rows to be more readable
-    ta.scale(1, 3)
-    plt.rcParams.update({"font.size": 50})
-    plt.savefig(LOCAL_NAME, transparent=True, bbox_inches="tight")
+    ta.scale(1, 4)
     plt.tight_layout()
+    plt.savefig(LOCAL_NAME, transparent=True, bbox_inches="tight")
     return LOCAL_NAME
 
 
@@ -602,9 +612,16 @@ def bridge_table(df, output_dir, swedish=False):
     LOCAL_NAME = output_dir / f
     df = df2
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(24, 10))
     ax.axis("off")
-    table(ax, df, loc="center")
+    ta = table(ax, df, loc="center", zorder=5.0)
+     # Setting the font size
+    ta.auto_set_font_size(False)
+    ta.set_fontsize(44) 
+    # Rescaling the rows to be more readable
+    ta.scale(1, 4)
+    plt.tight_layout()
+
     plt.savefig(LOCAL_NAME)
 
     return LOCAL_NAME
