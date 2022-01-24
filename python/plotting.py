@@ -517,7 +517,7 @@ def roof_table(df, output_dir, swedish=False):
     #text_file.write(html)
     #text_file.close()
 
-    fig, ax = plt.subplots(figsize=(32, 12))
+    fig, ax = plt.subplots(figsize=(34, 12))
     ax.axis("off")
     ta = table(ax, df, loc="center", zorder=5.0)
      # Setting the font size
@@ -612,7 +612,7 @@ def bridge_table(df, output_dir, swedish=False):
     LOCAL_NAME = output_dir / f
     df = df2
 
-    fig, ax = plt.subplots(figsize=(24, 10))
+    fig, ax = plt.subplots(figsize=(32, 12))
     ax.axis("off")
     ta = table(ax, df, loc="center", zorder=5.0)
      # Setting the font size
