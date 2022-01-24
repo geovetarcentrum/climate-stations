@@ -517,12 +517,12 @@ def roof_table(df, output_dir, swedish=False):
     #text_file.write(html)
     #text_file.close()
 
-    fig, ax = plt.subplots(figsize=(34, 12))
+    fig, ax = plt.subplots(figsize=(36, 12))
     ax.axis("off")
     ta = table(ax, df, loc="center", zorder=5.0)
      # Setting the font size
     ta.auto_set_font_size(False)
-    ta.set_fontsize(44) 
+    ta.set_fontsize(45) 
     # Rescaling the rows to be more readable
     ta.scale(1, 4)
     plt.tight_layout()
