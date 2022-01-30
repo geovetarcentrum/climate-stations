@@ -27,16 +27,7 @@ def bridge_plot(df, output_dir, swedish=False):
     LOCAL_NAME - name the file is written to.
 
     """
-    plt.figure(figsize=(20, 45))
-
-    # fontsize
-    size = 36
-    linewidth = 3.0
-    labelpad = 40
-
-    # x tick formatting
-    xticks = df.index.values[:: 6 * 8]
-    xticklabels = df.TIMESTAMP.dt.hour.values[:: 6 * 8]
+    plt.figure(figsize=(20, 30))
 
     # language for labelling
     if swedish is True:
@@ -78,99 +69,62 @@ def bridge_plot(df, output_dir, swedish=False):
             "[hits/cm$^2$/hour]",
         ]
 
-    # pressure
-    fig = plt.subplot(7, 1, 1)
-    ax1 = df.P.plot(color="k", linewidth=linewidth, grid=True)
-    ax1.set_ylabel(ylabels[0], fontsize=size, labelpad=labelpad)
-    ax1.set_xticks(xticks)
-    ax1.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax1.get_yticks()
-    ax1.set_title(labels[0], fontsize=size * 1.5)
-    ax1.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax1.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax1.set_xlim(df.index.values.min(), df.index.values.max())
+    
+    columns= ['P', 'Ta' , 'RH', 'ws', 'wd', 'Rain']
 
-    # temperature
-    fig = plt.subplot(7, 1, 2)
-    ax2 = df.Ta.plot(color="red", linewidth=linewidth, grid=True)
-    ax2.set_ylabel(ylabels[1], fontsize=size, labelpad=labelpad)
-    ax2.set_xticks(xticks)
-    ax2.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax2.get_yticks()
-    ax2.set_title(labels[1], fontsize=size * 1.5)
-    ax2.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax2.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax2.set_xlim(ax1.get_xlim())
+    #### colors and label/font sizes ####
+    # fontsize
+    size = 36
+    labelsize= 24
+    # linewidth
+    linewidth = 3.0
+    # label pad
+    labelpad = 40
+    colors = ['black', 'darkred','coral', 'deeppink', 'violet', 'lightblue','dodgerblue', 'indigo']
 
-    # relative humidity
-    fig = plt.subplot(7, 1, 3)
-    ax3 = df.RH.plot(color="darkblue", linewidth=linewidth, grid=True)
-    ax3.set_ylabel(ylabels[2], fontsize=size, labelpad=labelpad)
-    ax3.set_xticks(xticks)
-    ax3.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax3.get_yticks()
-    ax3.set_title(labels[2], fontsize=size * 1.5)
-    ax3.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax3.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax3.set_xlim(ax1.get_xlim())
+    # get dates in nicer format
+    years = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.year.values
+    months = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.month.values
+    days = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.day.values
+    dates = []
+    for idx in range(days.size):
+        date = str(years[idx]) +'-'+ str(months[idx])  +'-'+ str( days[idx])
+        dates.append(date)
 
-    # wind speed
-    fig = plt.subplot(7, 1, 4)
-    ax4 = df.ws.plot(color="teal", linewidth=linewidth, grid=True)
-    ax4.set_ylabel(ylabels[3], fontsize=size, labelpad=labelpad)
-    ax4.set_xticks(xticks)
-    ax4.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax4.get_yticks()
-    ax4.set_title(labels[3], fontsize=size * 1.5)
-    ax4.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax4.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax4.set_xlim(ax1.get_xlim())
+    #### subplot ####
+    for subplt in np.arange(6):
+        subplot_nr = subplt+ 1
+        colname = columns[subplt]
+        fig = plt.subplot(6, 1, subplot_nr)
+        ax1 = df[colname].plot(color= colors[subplt], linewidth=linewidth, grid=True)
 
-    # wind direction
-    fig = plt.subplot(7, 1, 5)
-    ax5 = df.wd.plot(color="darkgreen", linewidth=linewidth, grid=True)
-    ax5.set_ylabel(ylabels[4], fontsize=size, labelpad=labelpad)
-    ax5.set_xticks(xticks)
-    ax5.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax5.get_yticks()
-    ax5.set_title(labels[4], fontsize=size * 1.5)
-    ax5.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax5.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax5.set_xlim(ax1.get_xlim())
+        # labels 
+        ax1.set_title(labels[subplt], fontsize=size * 1.5)
+        ax1.set_ylabel(ylabels[subplt], fontsize=size, labelpad=labelpad)
 
-    # rain
-    fig = plt.subplot(7, 1, 6)
-    ax6 = df.Rain.plot(color="grey", linewidth=linewidth, grid=True)
-    ax6.set_ylabel(ylabels[5], fontsize=size, labelpad=labelpad)
-    ax6.set_xticks(xticks)
-    ax6.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax6.get_yticks()
-    ax6.set_title(labels[5], fontsize=size * 1.5)
-    ax6.set_yticklabels(np.round(yticks, decimals=4), fontsize=size)
-    ax6.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax6.set_xlim(ax1.get_xlim())
+        # x tick formatting
+        df_hour = df[df.TIMESTAMP.dt.minute == 0]
+        mask = df_hour[(df.TIMESTAMP.dt.hour == 0) |(df.TIMESTAMP.dt.hour == 4) | (df.TIMESTAMP.dt.hour == 8) | (df.TIMESTAMP.dt.hour == 12) | (df.TIMESTAMP.dt.hour == 16)| (df.TIMESTAMP.dt.hour == 20)]
+        xticks = mask.index.values
+        xticklabels = mask.TIMESTAMP.dt.hour.values.astype(int)
+        ax1.set_xlim(df.index.values.min(), df.index.values.max())
+        ax1.set_xticks(xticks)
+        ax1.set_xticklabels(xticklabels, fontsize = labelsize )
+        ax = ax1.twiny()
+        ax.set_xlim(df.index.values.min(), df.index.values.max())
+        ax.set_xticks(df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].index.values)
+        ax.set_xticklabels(dates, rotation = 90, ha = 'center', fontsize= labelsize)   
+        ax.tick_params(axis="x",direction="in", pad = -150)
+        ax.xaxis.set_ticks_position('bottom')
 
-    # extra axis with dates
-    ax8 = ax6.twiny()
-    ax8.xaxis.set_ticks_position(
-        "bottom"
-    )  # set the position of the second x-axis to bottom
-    ax8.xaxis.set_label_position(
-        "bottom"
-    )  # set the position of the second x-axis to bottom
-    ax8.spines["bottom"].set_position(("outward", 40))
-    newlabel = []
-    times = df.TIMESTAMP.values[:: 6 * 24].astype(
-        str
-    )  # labels of the xticklabels: the position in the new x-axis
-    for t in times:
-        newlabel.append(t[0:10])
-    newpos = df.index.values[:: 6 * 24]  # position of the xticklabels in the old x-axis
-    ax8.set_xticks(newpos)
-    ax8.set_xticklabels(newlabel, rotation=45, fontsize=size)
-    ax8.set_xlim(ax1.get_xlim())
+        # ytick formatting 
+        yticks = ax1.get_yticks()
+        if colname =='Rain':
+            ax1.set_yticklabels(np.round(yticks, decimals = 4), fontsize = labelsize)
+        else:
+            ax1.set_yticklabels(yticks.astype(int), fontsize= labelsize)
+        ax1.get_yaxis().set_label_coords(-0.07, 0.5)
 
-    plt.xlabel("hour (CEST)", fontsize=size * 2)
     plt.tight_layout()
 
     # send to RCG server for plotting on WEB
@@ -244,156 +198,72 @@ def roof_plot(df, output_dir, swedish=False):
         ]
 
     plt.figure(figsize=(20, 35))
+    columns= ['P', 'Ta' , 'RH', 'ws', 'wd', 'Rain', 'Hail', 'L_down', 'K_down_SPN1']
 
+    #### colors and label/font sizes ####
     # fontsize
-    size = 32
+    size = 30
+    labelsize= 24
     # linewidth
     linewidth = 3.0
     # label pad
     labelpad = 40
+    colors = ['black', 'darkred', 'coral', 'deeppink', 'violet', 'lightblue','dodgerblue', 'indigo', 'lightseagreen', 'darkslategrey']
 
-    # x tick formatting
-    xticks = df.index.values[:: 6 * 8]
-    xticklabels = df.TIMESTAMP.dt.hour.values[:: 6 * 8]
+    # get dates in nicer format
+    years = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.year.values
+    months = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.month.values
+    days = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.day.values
+    dates = []
+    for idx in range(days.size):
+        date = str(years[idx]) +'-'+ str(months[idx])  +'-'+ str( days[idx])
+        dates.append(date)
 
-    # pressure
-    fig = plt.subplot(9, 1, 1)
-    ax1 = df.P.plot(color="k", linewidth=linewidth, grid=True)
-    ax1.set_ylabel(ylabels[0], fontsize=size, labelpad=labelpad)
-    ax1.set_xticks(xticks)
-    ax1.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax1.get_yticks()
-    ax1.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax1.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax1.set_title(labels[0], fontsize=size * 1.5)
-    ax1.set_xlim(df.index.values.min(), df.index.values.max())
-    # ax1.set_xlim(xticks.min(), xticks.max())
+    #### subplot ####
+    for subplt in np.arange(9):
+        subplot_nr = subplt+ 1
+        colname = columns[subplt]
+        fig = plt.subplot(9, 1, subplot_nr)
 
-    # temperature
-    fig = plt.subplot(9, 1, 2)
-    ax2 = df.Ta.plot(color="red", linewidth=linewidth, grid=True)
-    ax2.set_ylabel(ylabels[1], fontsize=size, labelpad=labelpad)
-    ax2.set_xticks(xticks)
-    ax2.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax2.get_yticks()
-    ax2.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax2.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax2.set_title(labels[1], fontsize=size * 1.5)
-    ax2.set_xlim(ax1.get_xlim())
+        if colname == 'K_down_SPN1':
+            fig = plt.subplot(9, 1, 9)
+            ax1 = df.K_down_SPN1.plot(color=colors[subplt], linewidth=linewidth, label="global", grid=True)
+            ax1 = df.K_diff_SPN1.plot(
+                color=colors[subplt+ 1 ], linewidth=linewidth, label="diffus", grid=True
+            )
+            legend = ax1.legend(fontsize=size, edgecolor="black")
+            legend.get_frame().set_alpha(None)
+            legend.get_frame().set_facecolor((0, 0, 1, 0.1))
+        else:
+             ax1 = df[colname].plot(color= colors[subplt], linewidth=linewidth, grid=True)
 
-    # relative humidity
-    fig = plt.subplot(9, 1, 3)
-    ax3 = df.RH.plot(color="darkblue", linewidth=linewidth, grid=True)
-    ax3.set_ylabel(ylabels[2], fontsize=size, labelpad=labelpad)
-    ax3.set_xticks(xticks)
-    ax3.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax3.get_yticks()
-    ax3.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax3.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax3.set_title(labels[2], fontsize=size * 1.5)
-    ax3.set_xlim(ax1.get_xlim())
+        # labels 
+        ax1.set_title(labels[subplt], fontsize=size * 1.5)
+        ax1.set_ylabel(ylabels[subplt], fontsize=size, labelpad=labelpad)
 
-    # wind speed
-    fig = plt.subplot(9, 1, 4)
-    ax4 = df.ws.plot(color="teal", linewidth=linewidth, grid=True)
-    ax4.set_ylabel(ylabels[3], fontsize=size, labelpad=labelpad)
-    ax4.set_xticks(xticks)
-    ax4.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax4.get_yticks()
-    ax4.set_title(labels[3], fontsize=size * 1.5)
-    ax4.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax4.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax4.set_xlim(ax1.get_xlim())
+        # x tick formatting
+        df_hour = df[df.TIMESTAMP.dt.minute == 0]
+        mask = df_hour[(df.TIMESTAMP.dt.hour == 0) |(df.TIMESTAMP.dt.hour == 4) | (df.TIMESTAMP.dt.hour == 8) | (df.TIMESTAMP.dt.hour == 12) | (df.TIMESTAMP.dt.hour == 16)| (df.TIMESTAMP.dt.hour == 20)]
+        xticks = mask.index.values
+        xticklabels = mask.TIMESTAMP.dt.hour.values.astype(int)
+        ax1.set_xlim(df.index.values.min(), df.index.values.max())
+        ax1.set_xticks(xticks)
+        ax1.set_xticklabels(xticklabels, fontsize = labelsize )
+        ax = ax1.twiny()
+        ax.set_xlim(df.index.values.min(), df.index.values.max())
+        ax.set_xticks(df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].index.values)
+        ax.set_xticklabels(dates, rotation = 90, ha = 'center', fontsize= labelsize)   
+        ax.tick_params(axis="x",direction="in", pad = -150)
+        ax.xaxis.set_ticks_position('bottom')
 
-    # wind direction
-    fig = plt.subplot(9, 1, 5)
-    ax5 = df.wd.plot(color="darkgreen", linewidth=linewidth, grid=True)
-    ax5.set_ylabel(ylabels[4], fontsize=size, labelpad=labelpad)
-    ax5.set_xticks(xticks)
-    ax5.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax5.get_yticks()
-    ax5.set_title(labels[4], fontsize=size * 1.5)
-    ax5.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax5.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax5.set_xlim(ax1.get_xlim())
+        # ytick formatting 
+        yticks = ax1.get_yticks()
+        if colname =='Rain' or colname == 'Hail':
+            ax1.set_yticklabels(np.round(yticks, decimals = 4), fontsize = labelsize)
+        else:
+            ax1.set_yticklabels(yticks.astype(int), fontsize= labelsize)
+        ax1.get_yaxis().set_label_coords(-0.07, 0.5)
 
-    # rain
-    fig = plt.subplot(9, 1, 6)
-    ax6 = df.Rain.plot(color="grey", linewidth=linewidth, grid=True)
-    ax6.set_ylabel(ylabels[5], fontsize=size, labelpad=labelpad)
-    ax6.set_xticks(xticks)
-    ax6.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax6.get_yticks()
-    ax6.set_title(labels[5], fontsize=size * 1.5)
-    ax6.set_yticklabels(np.round(yticks, decimals=4), fontsize=size)
-    ax6.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax6.set_xlim(ax1.get_xlim())
-
-    # hail
-    fig = plt.subplot(9, 1, 7)
-    ax7 = df.Hail.plot(color="lightblue", linewidth=linewidth, grid=True)
-    ax7.set_ylabel(ylabels[6], fontsize=size, labelpad=labelpad)
-    ax7.set_xticks(xticks)
-    ax7.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax7.get_yticks()
-    ax7.set_title(labels[6], fontsize=size * 1.5)
-    ax7.set_yticklabels(np.round(yticks, decimals=4), fontsize=size)
-    ax7.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax7.set_xlim(ax1.get_xlim())
-
-    # L down
-    fig = plt.subplot(9, 1, 8)
-    ax8 = df.L_down.plot(color="orange", linewidth=linewidth, grid=True)
-    ax8.set_ylabel(ylabels[7], fontsize=size, labelpad=labelpad)
-    ax8.set_xticks(xticks)
-    ax8.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax8.get_yticks()
-    ax8.set_title(labels[7], fontsize=size * 1.5)
-    ax8.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax8.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax8.set_xlim(ax1.get_xlim())
-
-    # K down
-    fig = plt.subplot(9, 1, 9)
-    ax9 = df.K_down_SPN1.plot(
-        color="purple", linewidth=linewidth, label="global", grid=True
-    )
-    ax9 = df.K_diff_SPN1.plot(
-        color="violet", linewidth=linewidth, label="diffus", grid=True
-    )
-    legend = ax9.legend(fontsize=size, edgecolor="black")
-    legend.get_frame().set_alpha(None)
-    legend.get_frame().set_facecolor((0, 0, 1, 0.1))
-    ax9.set_ylabel(ylabels[8], fontsize=size, labelpad=labelpad)
-    ax9.set_xticks(xticks)
-    ax9.set_xticklabels(xticklabels, fontsize=size)
-    yticks = ax9.get_yticks()
-    ax9.set_title(labels[8], fontsize=size * 1.5)
-    ax9.set_yticklabels(yticks.astype(int), fontsize=size)
-    ax9.get_yaxis().set_label_coords(-0.07, 0.5)
-    ax9.set_xlim(ax1.get_xlim())
-
-    # extra axis with dates
-    ax8 = ax9.twiny()
-    ax8.xaxis.set_ticks_position(
-        "bottom"
-    )  # set the position of the second x-axis to bottom
-    ax8.xaxis.set_label_position(
-        "bottom"
-    )  # set the position of the second x-axis to bottom
-    ax8.spines["bottom"].set_position(("outward", 40))
-    newlabel = []
-    times = df.TIMESTAMP.values[:: 6 * 24].astype(
-        str
-    )  # labels of the xticklabels: the position in the new x-axis
-    for t in times:
-        newlabel.append(t[0:10])
-    newpos = df.index.values[:: 6 * 24]  # position of the xticklabels in the old x-axis
-    ax8.set_xticks(newpos)
-    ax8.set_xticklabels(newlabel, rotation=45, fontsize=size)
-    ax8.set_xlim(ax1.get_xlim())
-
-    plt.xlabel("hour (CEST)", fontsize=size * 2)
     plt.tight_layout()
 
     # send to RCG server for plotting on WEB
