@@ -12,7 +12,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.plotting import table
-
+import warnings
+warnings.filterwarnings("ignore") 
 
 def bridge_plot(df, output_dir, swedish=False):
     """This function plots GVC roof date the four last days at 5 min resolution.
