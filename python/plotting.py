@@ -81,7 +81,7 @@ def bridge_plot(df, output_dir, swedish=False):
     linewidth = 3.0
     # label pad
     labelpad = 40
-    colors = ['black', 'darkred','coral', 'deeppink', 'violet', 'lightblue','dodgerblue', 'indigo']
+    colors = ['black', 'darkred','coral', 'deeppink', 'violet', 'dodgerblue', 'indigo']
 
     # get dates in nicer format
     years = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.year.values
@@ -209,7 +209,7 @@ def roof_plot(df, output_dir, swedish=False):
     linewidth = 3.0
     # label pad
     labelpad = 40
-    colors = ['black', 'darkred', 'coral', 'deeppink', 'violet', 'lightblue','dodgerblue', 'indigo', 'lightseagreen', 'darkslategrey']
+    colors = ['black', 'darkred', 'coral', 'deeppink', 'violet', 'dodgerblue','indigo', 'lightseagreen', 'darkslategrey']
 
     # get dates in nicer format
     years = df[(df.TIMESTAMP.dt.hour == 0) & (df.TIMESTAMP.dt.minute == 0  )].TIMESTAMP.dt.year.values
