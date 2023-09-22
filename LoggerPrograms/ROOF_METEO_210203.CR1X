@@ -1,0 +1,137 @@
+'CR1000X Series Datalogger
+
+'For programming tips, copy this address to your browser
+'search window:https://www.campbellsci.com/videos/datalogger-programming
+'To create a different opening program template, type in new
+'instructions and select Template | Save as Default Template
+'date: 20200220
+'program author: Per Weslien
+
+'Declare Constants
+
+Public Ta_Rot      'Rotronic
+Public RH_Rot      'Rotronic
+Public BATTERI
+Public SPN1_Total    'DeltaT SPN1 global rad
+Public SPN1_diff     'DeltaT SPN1 diffuse global rad
+Public pt_100        'K&Z CG1 Pyrgeometer pt100
+Public temp_L        'K&Z CG1 Pyrgeometer calculated pt100 temp Celsius
+Public temp_L_K      'K&Z CG1 Pyrgeometer calculated pt100 temp Kelvin
+Public L_sig         'K&Z CG1 Pyrgeometer long wave radiation
+Public LW_CG1        'K&Z CG1 Pyrgeometer temp corrected LW radiation
+Public Rotronic_fan  'Rotronic ventilation fan 
+
+
+'WXT520
+Public WXT520a(6)
+Alias WXT520a(1)=Wd_min    :Units Wd_min = deg
+Alias WXT520a(2)=Wd_avg    :Units Wd_avg = deg
+Alias WXT520a(3)=Wd_max    :Units Wd_max = deg
+Alias WXT520a(4)=Ws_min    :Units Ws_min = deg
+Alias WXT520a(5)=Ws_avg    :Units Ws_avg = deg
+Alias WXT520a(6)=Ws_max    :Units Ws_max = deg
+Public WXT520b(3)
+Alias WXT520b(1)=Ta        :Units Ta = degC
+Alias WXT520b(2)=RH        :Units RH = %
+Alias WXT520b(3)=P         :Units P = mbar
+Public WXT520c(6)
+Alias WXT520c(1)=Rc_amount
+Alias WXT520c(2)=Rd_dur
+Alias WXT520c(3)=Ri_intens
+Alias WXT520c(4)=Hc_amount
+Alias WXT520c(5)=Hd_dur
+Alias WXT520c(6)=Hd_intens
+
+'\\\\\\\\\\\\\\\\\\\\\\\\ OUTPUT SECTION ////////////////////////
+
+DataTable(Roof_meteo_10min,true,-1)
+  OpenInterval
+  DataInterval(0,10,Min,10)
+  Average(1, Ta_Rot, FP2, 0)
+  Average(1, RH_Rot, FP2, 0)
+  Average(1, SPN1_Total, FP2, 0)
+  Average(1, SPN1_diff, FP2, 0)
+  Average(1, temp_L_K, FP2, 0)
+  Average(1, L_sig, FP2, 0)
+  Average(1, Wd_min, FP2, 0)
+  Average(1, Wd_avg, FP2, 0)
+  Average(1, Wd_max, FP2, 0)
+  Average(1, Ws_min, FP2, 0)
+  Average(1, Ws_avg, FP2, 0)
+  Average(1, Ws_max, FP2, 0)
+  Average(1, Ta, FP2, 0)
+  Average(1, RH, FP2, 0)
+  Average(1, P, FP2, 0)
+  Average(1, Rc_amount, FP2, 0)
+  Average(1, Rd_dur, FP2, 0)
+  Average(1, Ri_intens, FP2, 0)
+  Average(1, Hc_amount, FP2, 0)
+  Average(1, Hd_dur, FP2, 0)
+  Average(1, Hd_intens, FP2, 0)
+  Minimum(1,BATTERI,FP2,0,1)
+  Average(1,Rotronic_fan, FP2, 0)
+EndTable
+
+DataTable(Roof_meteo_5min,true,-1)
+  OpenInterval
+  DataInterval(0,5,Min,10)
+  Average(1, Ta_Rot, FP2, 0)
+  Average(1, RH_Rot, FP2, 0)
+  Average(1, SPN1_Total, FP2, 0)
+  Average(1, SPN1_diff, FP2, 0)
+  Average(1, temp_L_K, FP2, 0)
+  Average(1, L_sig, FP2, 0)
+  Average(1, Wd_min, FP2, 0)
+  Average(1, Wd_avg, FP2, 0)
+  Average(1, Wd_max, FP2, 0)
+  Average(1, Ws_min, FP2, 0)
+  Average(1, Ws_avg, FP2, 0)
+  Average(1, Ws_max, FP2, 0)
+  Average(1, Ta, FP2, 0)
+  Average(1, RH, FP2, 0)
+  Average(1, P, FP2, 0)
+  Average(1, Rc_amount, FP2, 0)
+  Average(1, Rd_dur, FP2, 0)
+  Average(1, Ri_intens, FP2, 0)
+  Average(1, Hc_amount, FP2, 0)
+  Average(1, Hd_dur, FP2, 0)
+  Average(1, Hd_intens, FP2, 0)
+  Minimum(1,BATTERI,FP2,0,1)
+  Average(1,Rotronic_fan, FP2, 0)
+EndTable
+
+BeginProg
+'  bad = 0
+'  good = 0
+'  Tatemp = 0
+  Scan(5,Sec, 3, 0)
+
+
+    'Delta SPN1 Pyranometer
+    VoltSe(SPN1_Total, 1,AutoRange, 1, False, 0, _50Hz, 1, 0)
+    VoltSe(SPN1_diff, 1,AutoRange, 2, False, 0, _50Hz, 1, 0)
+
+    'Kipp & Zonen CG1 Pyrgeometer
+    BrFull6W(pt_100, 1,AutoRange,AutoRange, 4, VX1, 1, 2100, true, true, 0, _50Hz,  0.001, 0)
+    PRT(temp_L,1,pt_100,1,0)
+    temp_L_K = temp_L + 271.3
+    VoltDiff(L_sig, 1,AutoRange, 2, true, 0, 250, 67.842, 0)
+    LW_CG1 = L_sig+5.67e-8*temp_L_K^4
+    'Rotronic
+    VoltDiff(Ta_Rot, 1,AutoRange, 3,True, 0, _50Hz, 0.1,-40)
+    VoltDiff(RH_Rot, 1,AutoRange, 6,True, 0, _50Hz, 0.1, 0)
+    PulseCount (Rotronic_fan,1,P2,3,0,1.0,0)
+
+
+    'WXT520
+    SDI12Recorder(WXT520a(1),C7, "0", "R1!", 1, 0)
+    Delay(0,500,mSec)
+    SDI12Recorder(WXT520b(1),C7,"0", "R2!", 1, 0)
+    Delay(0,500,mSec)
+    SDI12Recorder(WXT520c(1),C7, "0", "R3!", 1, 0)
+
+    CallTable Roof_meteo_10min
+    CallTable Roof_meteo_5min
+	NextScan
+EndProg
+
