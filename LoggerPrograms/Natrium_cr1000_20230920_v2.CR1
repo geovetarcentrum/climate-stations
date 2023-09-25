@@ -1,0 +1,203 @@
+'Program name: C:\Users\Fredrik Lindberg\Desktop\TAK2013.CR1
+'Date written: 2014-01-27
+'Transform Version: 0.5
+'Transform file: C:\Program Files (x86)\Campbellsci\LoggerNet\CR10X.TRN Version: 1.3
+'
+'This program was converted from C:\Users\Fredrik Lindberg\Desktop\TAK2013.CSI
+'using Campbell Scientific's Transformer application.
+'
+'CRBasic angle units are in Radians by default.
+'Switch to Degrees as CR10 used Degrees.
+' AngleDegrees
+'
+' Declare array of flags as the CR10 had.
+'Public Flag(8) As Boolean
+
+'{CR10}
+
+'\\\\\\\\\\\\\\\\\\\\\\\\\ DECLARATIONS /////////////////////////
+
+'Public LUFTTEMP
+'Public LUFTFUKT
+'Public REGNDYGN
+'Public Loc5
+'Public VINDRIKTN
+'Public VINDHAST
+'Public REGN
+Public BATTERI
+'Public Ltrydec
+'Public Ltryckhel
+'Public MASKNING
+'Public Lufttryck
+'Public SPN1_Tota
+'Public SPN1_diff
+'Public pt_100
+'Public temp_L_K
+'Public L_sig
+'Public temp_L
+
+
+'WXT520
+Public WXT520a(6)
+Alias WXT520a(1)=Wd_min
+Alias WXT520a(2)=Wd_avg
+Alias WXT520a(3)=Wd_max
+Alias WXT520a(4)=Ws_min
+Alias WXT520a(5)=Ws_avg
+Alias WXT520a(6)=Ws_max
+Public WXT520b(3)
+Alias WXT520b(1)=Ta
+Alias WXT520b(2)=RH
+Alias WXT520b(3)=P
+Public WXT520c(6)
+Alias WXT520c(1)=Rc_amount
+Alias WXT520c(2)=Rd_dur
+Alias WXT520c(3)=Ri_intens
+Alias WXT520c(4)=Hc_amount
+Alias WXT520c(5)=Hd_dur
+Alias WXT520c(6)=Hd_intens
+
+'\\\\\\\\\\\\\\\\\\\\\\\\ OUTPUT SECTION ////////////////////////
+
+DataTable(Table110,true,-1)
+  OpenInterval       
+  DataInterval(0,10,Min,10)                   
+'  Average(1, LUFTTEMP, FP2, 0)
+'  Average(1, LUFTFUKT, FP2, 0)
+'  WindVector(1, VINDHAST, VINDRIKTN, FP2, 0, 0, 0, 0)           
+'  Totalize(1, REGN, FP2, 0)
+'  Sample(1, REGNDYGN, FP2)
+'  Average(1, Lufttryck, FP2, 0)
+'  Average(1, Ltryckhel, FP2, 0)
+'  Average(1, Ltrydec, FP2, 0)
+'  Average(1, SPN1_Tota, FP2, 0)
+'  Average(1, SPN1_diff, FP2, 0)
+'  Average(1, temp_L_K, FP2, 0)
+'  Average(1, L_sig, FP2, 0)
+  Average(1, Wd_min, FP2, 0)
+  Average(1, Wd_avg, FP2, 0)
+  Average(1, Wd_max, FP2, 0)
+  Average(1, Ws_min, FP2, 0)
+  Average(1, Ws_avg, FP2, 0)
+  Average(1, Ws_max, FP2, 0)
+  Average(1, Ta, FP2, 0)
+  Average(1, RH, FP2, 0)
+  Average(1, P, FP2, 0)
+  Average(1, Rc_amount, FP2, 0)
+  Average(1, Rd_dur, FP2, 0)
+  Average(1, Ri_intens, FP2, 0)
+  Average(1, Hc_amount, FP2, 0)
+  Average(1, Hd_dur, FP2, 0)
+  Average(1, Hd_intens, FP2, 0)
+  WindVector(1, Ws_avg, Wd_avg, FP2, 1, 0, 0, 0)
+  Average(1,BATTERI,FP2,0)
+EndTable
+'DataTable(Table160,true,-1)
+'  OpenInterval       
+'  DataInterval(0,60,Min,10)                   
+'  Average(1, LUFTTEMP, FP2, 0)
+'  Average(1, LUFTFUKT, FP2, 0)
+'  WindVector(1, VINDHAST, VINDRIKTN, FP2, 0, 0, 0, 0)           
+'  Totalize(1, REGN, FP2, 0)
+'  Sample(1, REGNDYGN, FP2)
+'  Average(1, Lufttryck, FP2, 0)
+'  Average(1, Ltryckhel, FP2, 0)
+'  Average(1, Ltrydec, FP2, 0)
+'  Average(1, SPN1_Tota, FP2, 0)
+'  Average(1, SPN1_diff, FP2, 0)
+'  Average(1, temp_L_K, FP2, 0)
+'  Average(1, L_sig, FP2, 0)
+'  Average(1, Wd_min, FP2, 0)
+'  Average(1, Wd_avg, FP2, 0)
+'  Average(1, Wd_max, FP2, 0)
+'  Average(1, Ws_min, FP2, 0)
+'  Average(1, Ws_avg, FP2, 0)
+'  Average(1, Ws_max, FP2, 0)
+'  Average(1, Ta, FP2, 0)
+'  Average(1, RH, FP2, 0)
+'  Average(1, P, FP2, 0)
+'  Average(1, Rc_amount, FP2, 0)
+'  Average(1, Rd_dur, FP2, 0)
+'  Average(1, Ri_intens, FP2, 0)
+'  Average(1, Hc_amount, FP2, 0)
+'  Average(1, Hd_dur, FP2, 0)
+'  Average(1, Hd_intens, FP2, 0)
+'  WindVector(1, Ws_avg, Wd_avg, FP2, 1, 0, 0, 0)
+'EndTable
+
+'\\\\\\\\\\\\\\\\\\\\\\\\\ SUBROUTINES //////////////////////////
+
+'Sub Subroutine1
+'      Loc5 = REGNDYGN
+'      REGNDYGN = 0
+'    EndSub
+
+
+'\\\\\\\\\\\\\\\\\\\\\\\\\\\ PROGRAM ////////////////////////////
+
+BeginProg
+
+  Scan(5,Sec, 3, 0)
+    Battery(BATTERI)
+'    ReadIO(MASKNING,63) 'P25 Port Read
+'    VINDRIKTN = MASKNING * 5.71
+'    PulseCount(VINDHAST, 1, 1, 1, 0, 0.01, 0.01)     
+'    PulseCount(REGN, 1, 2, 2, 0, 0.1, 0)     
+'    REGNDYGN = REGN + REGNDYGN
+'    If  TimeIntoInterval(0,1440,Min) Then Subroutine1       
+'8:  Pulse (P3)
+' 1: 1        Reps
+' 2: 2        Pulse Input Channel
+' 3: 2        Switch Closure, All Counts
+' 4: 0        Loc [ _________ ]
+' 5: .25      Mult
+' 6: 0        Offset
+'    VoltSe(SPN1_Tota, 1, mV2500, 1, False, 0, _50Hz, 1, 0) 
+'    VoltSe(SPN1_diff, 1, mV2500, 2, False, 0, _50Hz, 1, 0) 
+'11:  Volt (SE) (P1)
+' 1: 1        Reps
+' 2: 3        25 mV Slow Range
+' 3: 3        SE Channel
+' 4: 0        Loc [ _________ ]
+' 5: 1        Mult
+' 6: 0        Offset
+'12:  Volt (SE) (P1)
+' 1: 1        Reps
+' 2: 25       2500 mV 60 Hz Rejection Range
+' 3: 4        SE Channel
+' 4: 0        Loc [ _________ ]
+' 5: 1.0      Mult
+' 6: 0.0      Offset
+'    BrFull6W(pt_100, 1, 3, 3, 4, VX1, 1, 2100, true, true, 0, _50Hz,  0.001, 0)
+    
+    'BrFull6W(pt_100,1,3,3,1,Vx1,1,2100,True ,True ,0,_50Hz,0.001,0)
+    
+ '   PRT(temp_L,1,pt_100,1,0)
+  '  temp_L_K = temp_L + 271.3
+'    VoltDiff(L_sig, 1, mV2_5, 2, true, 0, 250, 67.842, 0) 
+'    VoltSe(LUFTTEMP, 1, mV2500, 6, False, 0, _50Hz, 0.1, 0) 
+'    VoltSE(Lufttryck, 1, mV2500, 11, False, 0, _50Hz, 0.24, 510) 
+'    Ltrydec = FRAC(Lufttryck)
+'    Ltryckhel = INT(Lufttryck)
+'    VoltSE(LUFTFUKT, 1, mV2500, 12, False, 0, _50Hz, 0.1, 0) 
+'18:  Volt (Diff) (P2)
+' 1: 1        Reps
+' 2: 35       2500 mV 50 Hz Rejection Range
+' 3: 5        DIFF Channel
+' 4: 0        Loc [ _________ ]
+' 5: 100      Mult
+' 6: 0.0      Offset
+
+'WXT520
+    SDI12Recorder(WXT520a(1), 7,"0", "M1!", 1, 0)     
+    Delay(0,500,MSEC)
+    SDI12Recorder(WXT520b(1), 7, "0", "M2!", 1, 0)     
+    Delay(0,500,MSEC)
+    SDI12Recorder(WXT520c(1), 7, "0", "M3!", 1, 0)  
+    CallTable Table110 
+    'P78 
+    'P78 
+ '   CallTable Table160 
+    'P78 
+  NextScan
+EndProg
